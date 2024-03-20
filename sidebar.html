@@ -1,0 +1,42 @@
+<!-- sidebar.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sidebar</title>
+    <style>
+        /* Стилі для бокової панелі */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            overflow: hidden; /* Щоб бокова панель була за межами видимої області */
+        }
+        .sidebar {
+            position: fixed;
+            top: 0;
+            right: 0;
+            height: 100%;
+            width: 20%;
+            background-color: #f0f0f0;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+            z-index: 9999; /* Забезпечення відображення панелі над усім іншим контентом */
+        }
+        .sidebar-content {
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="sidebar-content">
+            <!-- Вміст бокової панелі -->
+            <h2>Sidebar Content</h2>
+            <p>This is the content of the sidebar.</p>
+        </div>
+    </div>
+</body>
+</html>

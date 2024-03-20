@@ -3,19 +3,19 @@ document.addEventListener('DOMContentLoaded', function() {
     var settingsForm = document.getElementById('settingsForm');
     var baseUrlInput = document.getElementById('baseUrl');
 
-    // Restore saved settings
-    chrome.storage.sync.get(['baseUrl'], function(result) {
-        baseUrlInput.value = result.baseUrl || '';
-    });
+    var baseUrlValue = localStorage.getItem('baseUrl');
+
+    baseUrlInput.value = baseUrlValue || ''; // Set to empty string if null
 
     // Save settings on form submit
     settingsForm.addEventListener('submit', function(event) {
         event.preventDefault();
-        var baseUrl = baseUrlInput.value.trim();
-
-        // Save baseUrl to storage
-        chrome.storage.sync.set({ 'baseUrl': baseUrl }, function() {
-            console.log('Base URL saved:', baseUrl);
-        });
+        // Read baseUrl value from input field
+        var newBaseUrlValue = baseUrlInput.value;
+        // Save new baseUrl to local storage
+        localStorage.setItem('baseUrl', newBaseUrlValue);
+        // Close the popup window
+        window.close();
+        alert('Settings saved successfully!' + newBaseUrlValue);
     });
 });

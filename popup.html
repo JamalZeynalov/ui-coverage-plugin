@@ -7,21 +7,75 @@
     <style>
         body {
             font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
             margin: 10px;
         }
+
+        .container {
+            width: 450px; /* Set width to 20% */
+            background-color: #f2f2f2;
+            border-radius: 10px;
+            font-size: 14px;
+        }
+
         button {
-            padding: 10px 20px;
-            font-size: 16px;
+            padding: 8px 16px; /* Smaller padding for buttons */
+            font-size: 14px; /* Smaller font size for buttons */
             cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            color: white;
+        }
+
+        #saveButton {
+            background-color: #1da1f2; /* Blue color for Save button */
+        }
+
+        #jsonFileInput {
+            display: none;
+            font-weight: bold;
+            color: dodgerblue;
+            padding: 0.5em;
+            border: thin solid grey;
+            border-radius: 3px;
+        }
+        #fileInputLabel {
+            display: inline-block;
+            padding: 8px 12px;
+            background-color: #f2f2f2;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        #jsonFileInput:focus + #fileInputLabel {
+            outline: 2px solid blue; /* Example: Add focus style */
+        }
+        #resetJsonFileInput {
+            background-color: dimgrey; /* Red color for Reset button */
+            margin-left: 5px; /* Add margin between the buttons */
+        }
+
+        #buttonsContainer {
+            margin-top: 10px; /* Add margin above the buttons */
+        }
+
+        #checkButton {
+            background-color: #00cc00; /* Green color for Check button */
         }
     </style>
 </head>
 <body>
+<div class="container">
     <h2>UI Tests Coverage</h2>
-    <p>Select a JSON file containing the list of XPath locators:</p>
-    <input type="file" id="jsonFileInput" accept=".json"><br><br>
-    <button id="checkButton">Check</button>
+    <div id="buttonsContainer">
+        <p>Select a JSON file containing the list of XPath locators:</p>
+        <label for="jsonFileInput" id="fileInputLabel">No File Selected</label>
+        <input type="file" id="jsonFileInput" accept=".json" style="display: none;">
+        <button id="resetJsonFileInput">Reset Selected File</button><br><br>
+        <button id="checkButton">Check</button>
+    </div>
+</div>
 
-    <script src="popup.js"></script>
+<script src="popup.js"></script>
 </body>
 </html>

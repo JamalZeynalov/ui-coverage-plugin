@@ -1,4 +1,3 @@
-<!-- sidebar.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,37 +5,71 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sidebar</title>
     <style>
-        /* Стилі для бокової панелі */
+        /* Styles for the sidebar */
         body {
             margin: 0;
             padding: 0;
             font-family: Arial, sans-serif;
-            overflow: hidden; /* Щоб бокова панель була за межами видимої області */
+            overflow: hidden; /* To keep the sidebar outside of the visible area */
         }
+
         .sidebar {
             position: fixed;
             top: 0;
             right: 0;
             height: 100%;
-            width: 20%;
-            background-color: #f0f0f0;
+            width: 25%;
+            background-color: #ffb700;
             overflow-x: hidden;
             transition: 0.5s;
             padding-top: 60px;
-            z-index: 9999; /* Забезпечення відображення панелі над усім іншим контентом */
+            z-index: 9999; /* Ensure the sidebar is displayed above all other content */
         }
+
         .sidebar-content {
             padding: 20px;
+        }
+
+        /* Style for the links list */
+        .sidebar-content ul {
+            font-size: 16px; /* Set the font size to 16px */
         }
     </style>
 </head>
 <body>
-    <div class="sidebar">
-        <div class="sidebar-content">
-            <!-- Вміст бокової панелі -->
-            <h2>Sidebar Content</h2>
-            <p>This is the content of the sidebar.</p>
-        </div>
+<div class="sidebar">
+    <div class="sidebar-content">
+        <h2>Sidebar Content</h2>
+        <!-- Content rendered based on the 'xpath' parameter -->
+        <p id="xpathContent"></p>
     </div>
+</div>
+<script>
+    // Function to update the content of the sidebar with new 'xpath' value and baseUrl
+    function updateSidebarContent(xpath, baseUrl) {
+        // Update the content of the paragraph with the new 'xpath' value and baseUrl
+        document.getElementById('xpathContent').innerHTML =
+            '<h2>Sidebar Content</h2><ul><li><a target="_blank" href="' + baseUrl + '">' + baseUrl + '</a></li></ul>';
+    }
+
+    // Retrieve the value of the 'xpath' parameter from the URL
+    var urlParams = new URLSearchParams(window.location.search);
+    var xpath = urlParams.get('xpath');
+    var baseUrl = urlParams.get('baseUrl');
+
+    // Update the sidebar content with the initial 'xpath' value
+    updateSidebarContent(xpath, baseUrl);
+
+    // Listen for changes in the URL (e.g., due to navigation)
+    window.addEventListener('popstate', function (event) {
+        // Retrieve the new 'xpath' value from the updated URL
+        var newURLParams = new URLSearchParams(window.location.search);
+        var newXPath = newURLParams.get('xpath');
+        var baseUrl = newURLParams.get('baseUrl');
+
+        // Update the sidebar content with the new 'xpath' value
+        updateSidebarContent(newXPath, baseUrl);
+    });
+</script>
 </body>
 </html>

@@ -54,14 +54,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     args: [xpath]
                 });
             });
-            // Підсвічуємо елементи і додаємо обробник подій для підсвічених елементів
-            locators.forEach(function (xpath) {
-                chrome.scripting.executeScript({
-                    target: {tabId: tabs[0].id},
-                    function: highlightElementsInTab,
-                    args: [xpath]
-                });
-            });
         });
     }
 

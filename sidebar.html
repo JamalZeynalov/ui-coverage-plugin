@@ -10,6 +10,7 @@
             margin: 0;
             padding: 0;
             font-family: Arial, sans-serif;
+            color: rgba(94, 255, 0, 0.49);
             overflow: hidden; /* To keep the sidebar outside of the visible area */
         }
 
@@ -18,8 +19,8 @@
             top: 0;
             right: 0;
             height: 100%;
-            width: 25%;
-            background-color: #ffb700;
+            width: 300px;
+            color: #ffb700;
             overflow-x: hidden;
             transition: 0.5s;
             padding-top: 60px;
@@ -29,11 +30,6 @@
         .sidebar-content {
             padding: 20px;
         }
-
-        /* Style for the links list */
-        .sidebar-content ul {
-            font-size: 16px; /* Set the font size to 16px */
-        }
     </style>
 </head>
 <body>
@@ -41,17 +37,11 @@
     <div class="sidebar-content">
         <h2>Sidebar Content</h2>
         <!-- Content rendered based on the 'xpath' parameter -->
-        <p id="xpathContent"></p>
+        <div id="xpathContent"></div>
     </div>
 </div>
+<script src="popup.js"></script>
 <script>
-    // Function to update the content of the sidebar with new 'xpath' value and baseUrl
-    function updateSidebarContent(xpath, baseUrl) {
-        // Update the content of the paragraph with the new 'xpath' value and baseUrl
-        document.getElementById('xpathContent').innerHTML =
-            '<h2>Sidebar Content</h2><ul><li><a target="_blank" href="' + baseUrl + '">' + baseUrl + '</a></li></ul>';
-    }
-
     // Retrieve the value of the 'xpath' parameter from the URL
     var urlParams = new URLSearchParams(window.location.search);
     var xpath = urlParams.get('xpath');

@@ -1,46 +1,56 @@
 function openSidebar(xpath, baseUrl) {
     alert('openSidebar function called. ' + xpath + baseUrl);
-    var sidebarWidth = 20; // Adjust as needed
+    var sidebarWidth = 30; // Adjust as needed
     var sidebar = document.querySelector('.sidebar');
 
     // Check if the sidebar already exists
-    if (!sidebar) {
-        // If sidebar doesn't exist, create a new one
-        sidebar = document.createElement('div');
-        sidebar.classList.add('sidebar');
-        sidebar.style.position = 'fixed';
-        sidebar.style.top = '0';
-        sidebar.style.right = '0';
-        sidebar.style.width = sidebarWidth + '%';
-        sidebar.style.height = '100%';
-        sidebar.style.backgroundColor = '#f0f0f0'; // Customize as needed
-        sidebar.style.overflowX = 'hidden';
-        sidebar.style.transition = 'right 0.5s ease'; // Add transition effect
-        sidebar.style.paddingTop = '60px';
-        sidebar.style.zIndex = '9999'; // Ensure it appears above other content
-
-        // Create and append the sidebar content
-        var sidebarContent = document.createElement('div');
-        sidebarContent.classList.add('sidebar-content');
-        sidebar.appendChild(sidebarContent);
-
-        document.body.appendChild(sidebar);
-        // Animate sidebar opening
-        setTimeout(function () {
-            sidebar.style.right = '0';
-        }, 100);
+    if (sidebar) {
+        // If sidebar exists, remove it from the DOM
+        sidebar.parentNode.removeChild(sidebar);
     }
+
+    // Create a new sidebar
+    sidebar = document.createElement('div');
+    sidebar.classList.add('sidebar');
+    sidebar.style.position = 'fixed';
+    sidebar.style.top = '0';
+    sidebar.style.right = '0';
+    sidebar.style.width = sidebarWidth + '%';
+    sidebar.style.height = '100%';
+    sidebar.style.backgroundColor = 'rgba(255,196,0,0.87)'; // Customize as needed
+    sidebar.style.overflowX = 'hidden';
+    sidebar.style.transition = 'right 0.5s ease'; // Add transition effect
+    sidebar.style.paddingTop = '60px';
+    sidebar.style.zIndex = '9999'; // Ensure it appears above other content
+    sidebar.style.fontSize = '20px';
+
+    // Create and append the sidebar content
+    var sidebarContent = document.createElement('div');
+    sidebarContent.classList.add('sidebar-content');
+    sidebar.appendChild(sidebarContent);
+
+    document.body.appendChild(sidebar);
+
+    // Animate sidebar opening
+    setTimeout(function () {
+        sidebar.style.right = '0';
+    }, 100);
 
     // Update the content of the sidebar with the new 'xpath' value and baseUrl
     updateSidebarContent(xpath, baseUrl);
 }
 
-function updateSidebarContent(xpath, baseUrl) {
+
+window.updateSidebarContent = function updateSidebarContent(xpath, baseUrl) {
     var sidebarContent = document.querySelector('.sidebar-content');
     if (sidebarContent) {
         // Update the content of the sidebar with the new 'xpath' value and baseUrl
         sidebarContent.innerHTML = '' +
-            '<h2>Sidebar Content</h2><ul><li><a target="_blank" href="' + baseUrl + '">' + baseUrl + '</a></li></ul>' +
+            '<ul>' +
+            '<li>' +
+            '<a target="_blank" href="' + baseUrl + '">' + xpath + '</a>' +
+            '</li>' +
+            '</ul>' +
             '';
     }
 }
@@ -70,6 +80,9 @@ document.addEventListener('DOMContentLoaded', function () {
         var selectedFile = event.target.files[0]; // Get the selected file
         var reader = new FileReader();
 
+        alert("event.target.files[0], " + event.target.files[0]);
+        alert("selectedFile, " + selectedFile);
+
         reader.onload = function (event) {
             // Event handler for when the file reading is completed
             var fileContent = event.target.result; // Get the file content from the reader
@@ -92,13 +105,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
     checkButton.addEventListener('click', function () {
         var selectedFileContent = {}
-        if (!selectedFileName) {
+        if (!localStorage.getItem('jsonFileName')) {
             alert('Please select a JSON file!' + localStorage.getItem('jsonFileContent'));
             return;
         } else {
             selectedFileContent = localStorage.getItem('jsonFileContent');
         }
-        alert('highlightElements function called.' + selectedFileContent);
         try {
             var jsonData = JSON.parse(selectedFileContent);
             highlightElements(jsonData, baseUrl);

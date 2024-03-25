@@ -1,59 +1,45 @@
 function openSidebar(xpath, baseUrl) {
-    alert('openSidebar function called. ' + xpath + baseUrl);
-    var sidebarWidth = 30; // Adjust as needed
-    var sidebar = document.querySelector('.sidebar');
+    // Close any existing sidebar
+    closeSidebar();
 
-    // Check if the sidebar already exists
-    if (sidebar) {
-        // If sidebar exists, remove it from the DOM
-        sidebar.parentNode.removeChild(sidebar);
-    }
+    // Create a new iframe element
+    var iframe = document.createElement('iframe');
+    iframe.setAttribute('id', 'sidebarFrame');
+    iframe.style.position = 'fixed';
+    iframe.style.top = '0';
+    iframe.style.right = '0';
+    iframe.style.width = '600px';
+    iframe.style.height = '100%';
+    iframe.style.border = 'none';
+    iframe.style.zIndex = '9999'; // Ensure the sidebar is displayed above all other content
+    iframe.style.backgroundColor = 'rgb(255,255,255)';
+    iframe.style.overflowX = 'hidden';
+    iframe.style.transition = 'right 0.5s ease'; // Add transition effect
+    iframe.style.fontSize = '20px';
 
-    // Create a new sidebar
-    sidebar = document.createElement('div');
-    sidebar.classList.add('sidebar');
-    sidebar.style.position = 'fixed';
-    sidebar.style.top = '0';
-    sidebar.style.right = '0';
-    sidebar.style.width = sidebarWidth + '%';
-    sidebar.style.height = '100%';
-    sidebar.style.backgroundColor = 'rgba(255,196,0,0.87)'; // Customize as needed
-    sidebar.style.overflowX = 'hidden';
-    sidebar.style.transition = 'right 0.5s ease'; // Add transition effect
-    sidebar.style.paddingTop = '60px';
-    sidebar.style.zIndex = '9999'; // Ensure it appears above other content
-    sidebar.style.fontSize = '20px';
+    var sidebarUrl = chrome.runtime.getURL('sidebar.html') + '?baseUrl=' + encodeURIComponent(baseUrl) + '&xpath=' + encodeURIComponent(xpath);
 
-    // Create and append the sidebar content
-    var sidebarContent = document.createElement('div');
-    sidebarContent.classList.add('sidebar-content');
-    sidebar.appendChild(sidebarContent);
-
-    document.body.appendChild(sidebar);
-
-    // Animate sidebar opening
-    setTimeout(function () {
-        sidebar.style.right = '0';
-    }, 100);
-
-    // Update the content of the sidebar with the new 'xpath' value and baseUrl
-    updateSidebarContent(xpath, baseUrl);
+    iframe.setAttribute('src', sidebarUrl); // Use chrome.runtime.getURL to get the correct path
+    document.body.appendChild(iframe);
 }
 
+// Listen for messages from the sidebar iframe
+window.addEventListener('message', function (event) {
+    var data = event.data;
+    if (data.action === 'closeSidebar') {
+        closeSidebar();
+    }
+});
 
-window.updateSidebarContent = function updateSidebarContent(xpath, baseUrl) {
-    var sidebarContent = document.querySelector('.sidebar-content');
-    if (sidebarContent) {
-        // Update the content of the sidebar with the new 'xpath' value and baseUrl
-        sidebarContent.innerHTML = '' +
-            '<ul>' +
-            '<li>' +
-            '<a target="_blank" href="' + baseUrl + '">' + xpath + '</a>' +
-            '</li>' +
-            '</ul>' +
-            '';
+// Function to close the sidebar
+function closeSidebar() {
+    // Remove the sidebar iframe
+    var sidebarFrame = document.getElementById('sidebarFrame');
+    if (sidebarFrame) {
+        sidebarFrame.parentNode.removeChild(sidebarFrame);
     }
 }
+
 
 document.addEventListener('DOMContentLoaded', function () {
     var jsonFileInput = document.getElementById('jsonFileInput');
@@ -79,9 +65,6 @@ document.addEventListener('DOMContentLoaded', function () {
     jsonFileInput.addEventListener('change', function (event) {
         var selectedFile = event.target.files[0]; // Get the selected file
         var reader = new FileReader();
-
-        alert("event.target.files[0], " + event.target.files[0]);
-        alert("selectedFile, " + selectedFile);
 
         reader.onload = function (event) {
             // Event handler for when the file reading is completed

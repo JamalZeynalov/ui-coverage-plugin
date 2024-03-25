@@ -1,4 +1,4 @@
-function openSidebar(xpath, baseUrl) {
+function openSidebar(baseUrl, xpath) {
     // Close any existing sidebar
     closeSidebar();
 
@@ -126,14 +126,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 chrome.scripting.executeScript({
                     target: {tabId: tabs[0].id},
                     function: highlightElementsInTab,
-                    args: [xpath, baseUrl]
+                    args: [baseUrl, xpath]
                 });
             });
         });
     }
 
     // Function to highlight elements on the page based on XPath
-    function highlightElementsInTab(xpath, baseUrl) {
+    function highlightElementsInTab(baseUrl, xpath) {
         var elements = document.evaluate(xpath, document, null, XPathResult.ANY_TYPE, null);
         var element = elements.iterateNext();
         while (element) {
@@ -142,7 +142,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Add click event listener to each highlighted element
             element.addEventListener('click', function (event) {
-                openSidebar(xpath, baseUrl);
+                openSidebar(baseUrl, xpath);
             });
             element = elements.iterateNext();
         }

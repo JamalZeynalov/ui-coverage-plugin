@@ -29,7 +29,8 @@
                 "<all_urls>"
             ],
             "js": [
-                "popup.js"
+                "popup.js",
+                "sidebar.js"
             ],
             "run_at": "document_end"
         }

@@ -5,7 +5,7 @@ function updateSidebarContent(baseUrl, xpath) {
     sidebarContent.innerHTML = '' +
         '<ul style="font-size: 20px">' +
         '<li>' +
-        '<a target="_blank" href="' + baseUrl + '">' + xpath + '</a>' +
+        '<a target="_blank" href="' + baseUrl + '">' + baseUrl + '</a>' +
         '</li>' +
         '</ul>';
 }
@@ -15,4 +15,4 @@ var xpath = urlParams.get('xpath');
 var baseUrl = urlParams.get('baseUrl');
 
 // Update the sidebar content with the initial 'xpath' value
-updateSidebarContent(xpath, baseUrl);
+updateSidebarContent(baseUrl, xpath);

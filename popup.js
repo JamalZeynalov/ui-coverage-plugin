@@ -1,4 +1,4 @@
-function openSidebar(baseUrl, xpath) {
+function openSidebar(baseUrl, xpath, testCasesIds) {
     // close if already open
     var sidebarFrame = window.document.getElementById('sidebarFrame');
     if (sidebarFrame) {
@@ -20,7 +20,7 @@ function openSidebar(baseUrl, xpath) {
     iframe.style.transition = 'right 0.5s ease'; // Add transition effect
     iframe.style.fontSize = '20px';
 
-    var sidebarUrl = chrome.runtime.getURL('sidebar.html') + '?baseUrl=' + encodeURIComponent(baseUrl) + '&xpath=' + encodeURIComponent(xpath);
+    var sidebarUrl = chrome.runtime.getURL('sidebar.html') + '?baseUrl=' + encodeURIComponent(baseUrl) + '&xpath=' + encodeURIComponent(xpath) + '&testCasesIds=' + encodeURIComponent(testCasesIds);
 
     iframe.setAttribute('src', sidebarUrl); // Use chrome.runtime.getURL to get the correct path
     document.body.appendChild(iframe);
@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var jsonFileInputLabel = document.getElementById('fileInputLabel');
     var resetJsonFileInput = document.getElementById('resetJsonFileInput');
     var checkButton = document.getElementById('checkButton');
-    var baseUrl = localStorage.getItem('baseUrl') + '/testcase/9596';
+    var baseUrl = localStorage.getItem('baseUrl');
 
     var selectedFileName = localStorage.getItem('jsonFileName');
     if (selectedFileName) {
@@ -103,27 +103,39 @@ document.addEventListener('DOMContentLoaded', function () {
                 return;
             }
 
-            // Iterate through each locator and highlight the corresponding elements
-            locators.forEach(function (xpath) {
-                // Execute script in the context of the active tab to highlight elements
-                chrome.scripting.executeScript({
-                    target: {tabId: tabs[0].id}, function: highlightElementsInTab, args: [baseUrl, xpath]
+            // Iterate over each XPath and its associated array of objects
+            for (var xpath in locators) {
+                var casesInfo = locators[xpath];
+                var caseIds = [];
+
+                // Iterate over each object in the array
+                casesInfo.forEach(function (object) {
+                    // Get the allure_id property from the object and add it to the idList array
+                    caseIds.push(object.allure_id);
                 });
-            });
+                // Iterate over each object in the array
+                chrome.scripting.executeScript({
+                    target: {tabId: tabs[0].id},
+                    function: highlightElementsInTab,
+                    args: [baseUrl, xpath, caseIds]
+                });
+            }
+
         });
     }
 
     // Function to highlight elements on the page based on XPath
-    function highlightElementsInTab(baseUrl, xpath) {
+    function highlightElementsInTab(baseUrl, xpath, caseIds) {
         var elements = document.evaluate(xpath, document, null, XPathResult.ANY_TYPE, null);
         var element = elements.iterateNext();
+
         while (element) {
             element.style.backgroundColor = 'green';
             element.setAttribute('data-highlighted', 'true');
 
             // Add click event listener to each highlighted element
             element.addEventListener('click', function (event) {
-                openSidebar(baseUrl, xpath);
+                openSidebar(baseUrl, xpath, caseIds);
             });
             element = elements.iterateNext();
         }

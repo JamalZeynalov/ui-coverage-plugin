@@ -132,6 +132,7 @@ document.addEventListener('DOMContentLoaded', function () {
         while (element) {
             element.style.backgroundColor = 'green';
             element.setAttribute('data-highlighted', 'true');
+            element.removeAttribute("href");
 
             // Add click event listener to each highlighted element
             element.addEventListener('click', function (event) {

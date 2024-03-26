@@ -1,6 +1,9 @@
 function openSidebar(baseUrl, xpath) {
-    // Close any existing sidebar
-    closeSidebar();
+    // close if already open
+    var sidebarFrame = window.document.getElementById('sidebarFrame');
+    if (sidebarFrame) {
+        sidebarFrame.parentNode.removeChild(sidebarFrame);
+    }
 
     // Create a new iframe element
     var iframe = document.createElement('iframe');
@@ -22,24 +25,6 @@ function openSidebar(baseUrl, xpath) {
     iframe.setAttribute('src', sidebarUrl); // Use chrome.runtime.getURL to get the correct path
     document.body.appendChild(iframe);
 }
-
-// Listen for messages from the sidebar iframe
-window.addEventListener('message', function (event) {
-    var data = event.data;
-    if (data.action === 'closeSidebar') {
-        closeSidebar();
-    }
-});
-
-// Function to close the sidebar
-function closeSidebar() {
-    // Remove the sidebar iframe
-    var sidebarFrame = document.getElementById('sidebarFrame');
-    if (sidebarFrame) {
-        sidebarFrame.parentNode.removeChild(sidebarFrame);
-    }
-}
-
 
 document.addEventListener('DOMContentLoaded', function () {
     var jsonFileInput = document.getElementById('jsonFileInput');
@@ -114,9 +99,7 @@ document.addEventListener('DOMContentLoaded', function () {
             // Check if locators exist for the current URL
             if (!locators) {
                 var fileContents = JSON.stringify(jsonData, null, 2);
-                alert('No locators found for the current URL.' +
-                    '\n\nLoaded file content:\n' + fileContents +
-                    '\n\nCurrent URL: ' + currentURL);
+                alert('No locators found for the current URL.' + '\n\nLoaded file content:\n' + fileContents + '\n\nCurrent URL: ' + currentURL);
                 return;
             }
 
@@ -124,9 +107,7 @@ document.addEventListener('DOMContentLoaded', function () {
             locators.forEach(function (xpath) {
                 // Execute script in the context of the active tab to highlight elements
                 chrome.scripting.executeScript({
-                    target: {tabId: tabs[0].id},
-                    function: highlightElementsInTab,
-                    args: [baseUrl, xpath]
+                    target: {tabId: tabs[0].id}, function: highlightElementsInTab, args: [baseUrl, xpath]
                 });
             });
         });
@@ -147,5 +128,4 @@ document.addEventListener('DOMContentLoaded', function () {
             element = elements.iterateNext();
         }
     }
-
 });

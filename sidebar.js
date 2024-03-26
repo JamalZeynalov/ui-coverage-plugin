@@ -10,9 +10,13 @@ function updateSidebarContent(baseUrl, xpath) {
         '</ul>';
 }
 
-var urlParams = new URLSearchParams(window.location.search);
-var xpath = urlParams.get('xpath');
-var baseUrl = urlParams.get('baseUrl');
+document.addEventListener('DOMContentLoaded', function () {
+    var urlParams = new URLSearchParams(window.location.search);
+    var xpath = urlParams.get('xpath');
+    var baseUrl = urlParams.get('baseUrl');
 
-// Update the sidebar content with the initial 'xpath' value
-updateSidebarContent(baseUrl, xpath);
+    // Update the sidebar content with the initial 'xpath' value
+    updateSidebarContent(baseUrl, xpath);
+});
+
+

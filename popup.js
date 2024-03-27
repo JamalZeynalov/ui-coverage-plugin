@@ -1,4 +1,4 @@
-function openSidebar(baseUrl, testCasesIds) {
+function openSidebar(baseUrl, xpath = null) {
     // close if already open
     var sidebarFrame = window.document.getElementById('sidebarFrame');
     if (sidebarFrame) {
@@ -20,29 +20,29 @@ function openSidebar(baseUrl, testCasesIds) {
     iframe.style.transition = 'right 0.5s ease'; // Add transition effect
     iframe.style.fontSize = '20px';
 
-    var ids = encodeURIComponent(testCasesIds);
     var url = encodeURIComponent(baseUrl);
+    var xpathEncoded = encodeURIComponent(xpath);
 
-    var sidebarUrl = chrome.runtime.getURL('sidebar.html') + '?baseUrl=' + url + '&testCases=' + ids;
+    var sidebarUrl = chrome.runtime.getURL('sidebar.html') + '?baseUrl=' + url + '&xpath=' + xpathEncoded;
 
     iframe.setAttribute('src', sidebarUrl); // Use chrome.runtime.getURL to get the correct path
     document.body.appendChild(iframe);
 }
 
-function collectTestCasesIds(jsonFileContent, currentPageUrl) {
-    var testCasesIds = [];
-    var jsonData = JSON.parse(jsonFileContent);
-    var locators = jsonData[currentPageUrl];
-
-    for (var xpathData in locators) {
-        var casesInfo = locators[xpathData];
-        casesInfo.forEach(function (object) {
-            testCasesIds.push(object.allure_id);
-        });
-    }
-    return testCasesIds;
-
-}
+// function collectTestCasesIds(jsonFileContent, currentPageUrl) {
+//     var testCasesIds = [];
+//     var jsonData = JSON.parse(jsonFileContent);
+//     var locators = jsonData[currentPageUrl];
+//
+//     for (var xpathData in locators) {
+//         var casesInfo = locators[xpathData];
+//         casesInfo.forEach(function (object) {
+//             testCasesIds.push(object.allure_id);
+//         });
+//     }
+//     return testCasesIds;
+//
+// }
 
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -80,24 +80,25 @@ document.addEventListener('DOMContentLoaded', function () {
         reader.onload = function (event) {
             // Event handler for when the file reading is completed
             var fileContent = event.target.result; // Get the file content from the reader
+            // Save jsonFileContent to Chrome Extension Storage
             localStorage.setItem('jsonFileName', selectedFile.name);
             localStorage.setItem('jsonFileContent', fileContent);
+            chrome.storage.local.set({'jsonFileContent': fileContent}, function () {
+                console.log('fileContent is saved to Chrome Extension Storage');
+            });
+
             jsonFileInputLabel.textContent = selectedFile.name; // Update the label
         };
 
         reader.readAsText(selectedFile);
-        console.log('File content stored in localStorage:', localStorage.getItem('jsonFileContent'));
     });
 
     // Add click event listener to each highlighted element
     showAllButton.addEventListener('click', function (event) {
         chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
             // Extract the URL of the active tab
-            var currentURL = tabs[0].url;
-
-            var allCasesIds = collectTestCasesIds(localStorage.getItem('jsonFileContent'), currentURL);
             chrome.scripting.executeScript({
-                target: {tabId: tabs[0].id}, function: openSidebar, args: [baseUrl, allCasesIds]
+                target: {tabId: tabs[0].id}, function: openSidebar, args: [baseUrl]
             });
         });
     });
@@ -144,17 +145,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Iterate over each XPath and its associated array of objects
             for (var xpath in locators) {
-                var casesInfo = locators[xpath];
-                var caseIds = [];
-
-                // Iterate over each object in the array
-                casesInfo.forEach(function (object) {
-                    // Get the allure_id property from the object and add it to the idList array
-                    caseIds.push(object.allure_id);
-                });
                 // Iterate over each object in the array
                 chrome.scripting.executeScript({
-                    target: {tabId: tabs[0].id}, function: highlightElementsInTab, args: [baseUrl, xpath, caseIds]
+                    target: {tabId: tabs[0].id}, function: highlightElementsInTab, args: [baseUrl, xpath]
                 });
             }
 
@@ -162,7 +155,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Function to highlight elements on the page based on XPath
-    function highlightElementsInTab(baseUrl, xpath, caseIds) {
+    function highlightElementsInTab(baseUrl, xpath) {
         var elements = document.evaluate(xpath, document, null, XPathResult.ANY_TYPE, null);
         var element = elements.iterateNext();
 
@@ -173,7 +166,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Add click event listener to each highlighted element
             element.addEventListener('click', function (event) {
-                openSidebar(baseUrl, caseIds);
+                openSidebar(baseUrl, xpath);
             });
             element = elements.iterateNext();
         }

@@ -27,11 +27,12 @@ function openSidebar(baseUrl, xpath, testCasesIds) {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    var jsonFileInput = document.getElementById('jsonFileInput');
-    var jsonFileInputLabel = document.getElementById('fileInputLabel');
-    var resetJsonFileInput = document.getElementById('resetJsonFileInput');
-    var checkButton = document.getElementById('checkButton');
-    var baseUrl = localStorage.getItem('baseUrl');
+    const jsonFileInput = document.getElementById('jsonFileInput');
+    const jsonFileInputLabel = document.getElementById('fileInputLabel');
+    const resetJsonFileInput = document.getElementById('resetJsonFileInput');
+    const checkButton = document.getElementById('checkButton');
+    const baseUrl = localStorage.getItem('baseUrl');
+    const allureLoginButton = document.getElementById('allureLoginButton');
 
     var selectedFileName = localStorage.getItem('jsonFileName');
     if (selectedFileName) {
@@ -44,6 +45,10 @@ document.addEventListener('DOMContentLoaded', function () {
     // Event listener for "jsonFileInput" change event
     jsonFileInput.addEventListener('change', function (event) {
         jsonFileInputLabel.textContent = localStorage.getItem('jsonFileName');
+    });
+
+    allureLoginButton.addEventListener('click', function () {
+        chrome.tabs.create({url: baseUrl});
     });
 
     // Event listener for changes in the jsonFileInput element

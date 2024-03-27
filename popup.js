@@ -1,4 +1,4 @@
-function openSidebar(baseUrl, xpath, testCasesIds) {
+function openSidebar(baseUrl, testCasesIds) {
     // close if already open
     var sidebarFrame = window.document.getElementById('sidebarFrame');
     if (sidebarFrame) {
@@ -20,19 +20,40 @@ function openSidebar(baseUrl, xpath, testCasesIds) {
     iframe.style.transition = 'right 0.5s ease'; // Add transition effect
     iframe.style.fontSize = '20px';
 
-    var sidebarUrl = chrome.runtime.getURL('sidebar.html') + '?baseUrl=' + encodeURIComponent(baseUrl) + '&xpath=' + encodeURIComponent(xpath) + '&testCasesIds=' + encodeURIComponent(testCasesIds);
+    var ids = encodeURIComponent(testCasesIds);
+    var url = encodeURIComponent(baseUrl);
+
+    var sidebarUrl = chrome.runtime.getURL('sidebar.html') + '?baseUrl=' + url + '&testCases=' + ids;
 
     iframe.setAttribute('src', sidebarUrl); // Use chrome.runtime.getURL to get the correct path
     document.body.appendChild(iframe);
 }
 
+function collectTestCasesIds(jsonFileContent, currentPageUrl) {
+    var testCasesIds = [];
+    var jsonData = JSON.parse(jsonFileContent);
+    var locators = jsonData[currentPageUrl];
+
+    for (var xpathData in locators) {
+        var casesInfo = locators[xpathData];
+        casesInfo.forEach(function (object) {
+            testCasesIds.push(object.allure_id);
+        });
+    }
+    return testCasesIds;
+
+}
+
+
 document.addEventListener('DOMContentLoaded', function () {
-    const jsonFileInput = document.getElementById('jsonFileInput');
-    const jsonFileInputLabel = document.getElementById('fileInputLabel');
-    const resetJsonFileInput = document.getElementById('resetJsonFileInput');
+    var jsonFileInput = document.getElementById('jsonFileInput');
+    var jsonFileInputLabel = document.getElementById('fileInputLabel');
+    const resetJsonFileButton = document.getElementById('resetJsonFileInput');
     const checkButton = document.getElementById('checkButton');
-    const baseUrl = localStorage.getItem('baseUrl');
     const allureLoginButton = document.getElementById('allureLoginButton');
+    const showAllButton = document.getElementById('showAllButton');
+
+    const baseUrl = localStorage.getItem('baseUrl');
 
     var selectedFileName = localStorage.getItem('jsonFileName');
     if (selectedFileName) {
@@ -68,8 +89,21 @@ document.addEventListener('DOMContentLoaded', function () {
         console.log('File content stored in localStorage:', localStorage.getItem('jsonFileContent'));
     });
 
-    // Event listener for "resetJsonFileInput" click event
-    resetJsonFileInput.addEventListener('click', function () {
+    // Add click event listener to each highlighted element
+    showAllButton.addEventListener('click', function (event) {
+        chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
+            // Extract the URL of the active tab
+            var currentURL = tabs[0].url;
+
+            var allCasesIds = collectTestCasesIds(localStorage.getItem('jsonFileContent'), currentURL);
+            chrome.scripting.executeScript({
+                target: {tabId: tabs[0].id}, function: openSidebar, args: [baseUrl, allCasesIds]
+            });
+        });
+    });
+
+    // Event listener for "resetJsonFileButton" click event
+    resetJsonFileButton.addEventListener('click', function () {
         localStorage.removeItem('jsonFileName'); // Remove stored file name
         localStorage.removeItem('jsonFileContent'); // Remove stored file content
         jsonFileInputLabel.textContent = 'No file selected'; // Update the label
@@ -120,9 +154,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
                 // Iterate over each object in the array
                 chrome.scripting.executeScript({
-                    target: {tabId: tabs[0].id},
-                    function: highlightElementsInTab,
-                    args: [baseUrl, xpath, caseIds]
+                    target: {tabId: tabs[0].id}, function: highlightElementsInTab, args: [baseUrl, xpath, caseIds]
                 });
             }
 
@@ -141,7 +173,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Add click event listener to each highlighted element
             element.addEventListener('click', function (event) {
-                openSidebar(baseUrl, xpath, caseIds);
+                openSidebar(baseUrl, caseIds);
             });
             element = elements.iterateNext();
         }

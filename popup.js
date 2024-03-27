@@ -131,15 +131,23 @@ document.addEventListener('DOMContentLoaded', function () {
         // Get information about the currently active tab
         chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
             // Extract the URL of the active tab
-            var currentURL = tabs[0].url;
+            // Extract the URL of the active tab
+            var parsedUrl = new URL(tabs[0].url);
+            var path = parsedUrl.pathname.replace(/\d+/g, 'X')
+
+            // Remove trailing slash if it exists
+            if (path.endsWith('/')) {
+                path = path.slice(0, -1);
+            }
+            var pageUrl = parsedUrl.origin + path;
 
             // Retrieve the list of locators for the current URL from the JSON data
-            var locators = jsonData[currentURL];
+            var locators = jsonData[pageUrl];
 
             // Check if locators exist for the current URL
             if (!locators) {
                 var fileContents = JSON.stringify(jsonData, null, 2);
-                alert('No locators found for the current URL.' + '\n\nLoaded file content:\n' + fileContents + '\n\nCurrent URL: ' + currentURL);
+                alert('No locators found for the current URL: ' + pageUrl + '\n\nLoaded file content:\n' + fileContents);
                 return;
             }
 
@@ -147,7 +155,7 @@ document.addEventListener('DOMContentLoaded', function () {
             for (var xpath in locators) {
                 // Iterate over each object in the array
                 chrome.scripting.executeScript({
-                    target: {tabId: tabs[0].id}, function: highlightElementsInTab, args: [baseUrl, xpath]
+                    target: {tabId: tabs[0].id}, function: highlightElementsInTab, args: [baseUrl, pageUrl, xpath]
                 });
             }
 
@@ -155,20 +163,29 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Function to highlight elements on the page based on XPath
-    function highlightElementsInTab(baseUrl, xpath) {
-        var elements = document.evaluate(xpath, document, null, XPathResult.ANY_TYPE, null);
-        var element = elements.iterateNext();
+    function highlightElementsInTab(baseUrl, pageUrl, xpath) {
+        chrome.storage.local.get(['jsonFileContent'], function (result) {
+            var elements = document.evaluate(xpath, document, null, XPathResult.ANY_TYPE, null);
+            var element = elements.iterateNext();
 
-        while (element) {
-            element.style.backgroundColor = 'green';
-            element.setAttribute('data-highlighted', 'true');
-            element.removeAttribute("href");
+            if (!element) {
+                var jsonContent = JSON.parse(result.jsonFileContent);
+                var originalXpath = jsonContent[pageUrl][xpath][0]['original_xpath'];
+                elements = document.evaluate(originalXpath, document, null, XPathResult.ANY_TYPE, null);
+                element = elements.iterateNext();
+            }
 
-            // Add click event listener to each highlighted element
-            element.addEventListener('click', function (event) {
-                openSidebar(baseUrl, xpath);
-            });
-            element = elements.iterateNext();
-        }
+            while (element) {
+                element.style.backgroundColor = 'green';
+                element.setAttribute('data-highlighted', 'true');
+                element.removeAttribute("href");
+
+                // Add click event listener to each highlighted element
+                element.addEventListener('click', function (event) {
+                    openSidebar(baseUrl, xpath);
+                });
+                element = elements.iterateNext();
+            }
+        });
     }
 });

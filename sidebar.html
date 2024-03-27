@@ -23,14 +23,20 @@
             color: #b0b0b0;
             overflow-x: hidden;
             transition: 0.5s;
-            padding-top: 60px;
+            padding-top: 20px;
             z-index: 9999; /* Ensure the sidebar is displayed above all other content */
-            font-size: 20px;
+            font-size: 18px;
         }
 
         .sidebar-content {
-            padding: 20px;
+            color: black;
+            overflow-x: scroll;
+            line-height: 1.2; /* Adjust this value to increase or decrease the space between lines */
+            padding-left: 20px;
+            padding-right: 10px;
+            padding-bottom: 70px;
         }
+
 
         #close {
             overflow: hidden;
@@ -81,7 +87,7 @@
 <div class="sidebar">
     <!-- Close button -->
     <button class="close-btn" id='close'>&times;</button>
-    <h2 style="text-align: center">Sidebar Content</h2>
+    <h2 style="text-align: center">Test Cases List</h2>
     <div id="sidebar-content" class="sidebar-content">
         <!-- Content rendered based on the 'xpath' parameter -->
     </div>

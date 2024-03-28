@@ -3,14 +3,18 @@
 function updateSidebarContent(baseUrl, pageUrl, xpath) {
     chrome.storage.local.get(['jsonFileContent'], function (result) {
         var sidebarContent = document.querySelector('.sidebar-content');
-
         var storedData = JSON.parse(result.jsonFileContent)[pageUrl];
+        var summary = '';
 
         let usedIds = new Set();
         let testCases = [];
         if (xpath !== null) {
+            // collect tests for the specific xpath
             testCases = storedData[xpath];
-            // Loop through each test case ID in the array
+            var testWord = testCases.length === 1 ? 'test case' : 'test cases';
+            summary = '<b>' + testCases.length + ' ' + testWord + ' interacted with this element. Locator:</b>' +
+                '<br>' +
+                '<p style="font-size: 16px">' + storedData[xpath][0].original_xpath + ' </p><hr>';
         } else {
             // collect tests for all xpaths
             var xpaths = Object.keys(storedData);
@@ -23,11 +27,14 @@ function updateSidebarContent(baseUrl, pageUrl, xpath) {
                     }
                 });
             });
+            var originalUrl = testCases[0]["original_page_url"];
+            summary = '<b>' + testCases.length + ' test cases interacted with this page</b>' + '<br>' +
+                '<p>Oritinal URL: <a href=' + originalUrl + ' target="_blank">' + originalUrl + ' </a></p><hr>';
         }
         testCases.sort((a, b) => parseInt(a.allure_id) - parseInt(b.allure_id));
 
-        var originalUrl = testCases[0]["original_page_url"];
-        sidebarContent.innerHTML = '' + '<p>Original URL: ' + '<a href=' + originalUrl + ' target="_blank">' + originalUrl + ' </a>' + '</p><hr>';
+
+        sidebarContent.innerHTML = summary;
 
         sidebarContent.innerHTML += '<ul>';
         testCases.forEach(function (testCase) {
@@ -57,6 +64,9 @@ document.addEventListener('DOMContentLoaded', function () {
         var parsedUrl = new URL(tabs[0].url);
         var path = parsedUrl.pathname.replace(/\d+/g, 'X')
 
+        if (path.includes('#')) {
+            path = path.split('#').slice(0, -1).join('');
+        }
         // Remove trailing slash if it exists
         if (path.endsWith('/')) {
             path = path.slice(0, -1);

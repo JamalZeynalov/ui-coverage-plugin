@@ -29,21 +29,6 @@ function openSidebar(baseUrl, xpath = null) {
     document.body.appendChild(iframe);
 }
 
-// function collectTestCasesIds(jsonFileContent, currentPageUrl) {
-//     var testCasesIds = [];
-//     var jsonData = JSON.parse(jsonFileContent);
-//     var locators = jsonData[currentPageUrl];
-//
-//     for (var xpathData in locators) {
-//         var casesInfo = locators[xpathData];
-//         casesInfo.forEach(function (object) {
-//             testCasesIds.push(object.allure_id);
-//         });
-//     }
-//     return testCasesIds;
-//
-// }
-
 
 document.addEventListener('DOMContentLoaded', function () {
     var jsonFileInput = document.getElementById('jsonFileInput');
@@ -135,6 +120,12 @@ document.addEventListener('DOMContentLoaded', function () {
             var parsedUrl = new URL(tabs[0].url);
             var path = parsedUrl.pathname.replace(/\d+/g, 'X')
 
+            if (path.includes('#')) {
+                alert('Path includes # - ' + path)
+                path = path.split('#').slice(0, -1).join('');
+                alert('Path after split - ' + path)
+            }
+
             // Remove trailing slash if it exists
             if (path.endsWith('/')) {
                 path = path.slice(0, -1);
@@ -165,25 +156,34 @@ document.addEventListener('DOMContentLoaded', function () {
     // Function to highlight elements on the page based on XPath
     function highlightElementsInTab(baseUrl, pageUrl, xpath) {
         chrome.storage.local.get(['jsonFileContent'], function (result) {
-            var elements = document.evaluate(xpath, document, null, XPathResult.ANY_TYPE, null);
+            var jsonContent = JSON.parse(result.jsonFileContent);
+            var isBlock = jsonContent[pageUrl][xpath][0]['is_block'];
+            var originalXpath = jsonContent[pageUrl][xpath][0]['original_xpath'];
+
+            var elements = document.evaluate(originalXpath, document, null, XPathResult.ANY_TYPE, null);
             var element = elements.iterateNext();
 
             if (!element) {
-                var jsonContent = JSON.parse(result.jsonFileContent);
-                var originalXpath = jsonContent[pageUrl][xpath][0]['original_xpath'];
-                elements = document.evaluate(originalXpath, document, null, XPathResult.ANY_TYPE, null);
+                // If the original XPath does not match any elements, try the generated XPath
+                elements = document.evaluate(xpath, document, null, XPathResult.ANY_TYPE, null);
                 element = elements.iterateNext();
             }
-
             while (element) {
-                element.style.backgroundColor = 'green';
                 element.setAttribute('data-highlighted', 'true');
-                element.removeAttribute("href");
+                if (isBlock) {
+                    element.style.backgroundColor = '#5FC4015D';
+                } else {
+                    element.style.backgroundColor = 'green';
+                    element.removeAttribute("href");
+                    // Add click event listener to each highlighted element
+                    element.addEventListener('click', function (event) {
+                        if (isBlock) {
+                            event.preventDefault();
+                        }
+                        openSidebar(baseUrl, xpath);
+                    });
+                }
 
-                // Add click event listener to each highlighted element
-                element.addEventListener('click', function (event) {
-                    openSidebar(baseUrl, xpath);
-                });
                 element = elements.iterateNext();
             }
         });

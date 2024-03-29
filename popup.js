@@ -29,13 +29,27 @@ function openSidebar(baseUrl, xpath = null) {
     document.body.appendChild(iframe);
 }
 
+function showTooltip(targetElement, text) {
+    var tooltip = document.createElement('div');
+    tooltip.className = 'custom-tooltip';
+    tooltip.innerHTML = text;
+    tooltip.style.position = 'absolute';
+    tooltip.style.backgroundColor = 'black';
+    tooltip.style.color = 'white';
+    tooltip.style.padding = '5px';
+    tooltip.style.borderRadius = '5px';
+    tooltip.style.zIndex = '9999';
+    tooltip.style.top = targetElement.clientY + 'px';
+    tooltip.style.left = targetElement.clientX + 'px';
+    document.body.appendChild(tooltip);
+}
 
 document.addEventListener('DOMContentLoaded', function () {
     var jsonFileInput = document.getElementById('jsonFileInput');
     var jsonFileInputLabel = document.getElementById('fileInputLabel');
     const resetJsonFileButton = document.getElementById('resetJsonFileInput');
     const checkButton = document.getElementById('checkButton');
-    const allureLoginButton = document.getElementById('allureLoginButton');
+    const coveredPagesButton = document.getElementById('coveredPagesButton');
     const showAllButton = document.getElementById('showAllButton');
 
     const baseUrl = localStorage.getItem('baseUrl');
@@ -53,8 +67,9 @@ document.addEventListener('DOMContentLoaded', function () {
         jsonFileInputLabel.textContent = localStorage.getItem('jsonFileName');
     });
 
-    allureLoginButton.addEventListener('click', function () {
-        chrome.tabs.create({url: baseUrl});
+    coveredPagesButton.addEventListener('click', function () {
+        var jsonData = JSON.parse(localStorage.getItem('jsonFileContent'));
+        alert('Covered pages:\n' + Object.keys(jsonData).join('\n'));
     });
 
     // Event listener for changes in the jsonFileInput element
@@ -121,9 +136,7 @@ document.addEventListener('DOMContentLoaded', function () {
             var path = parsedUrl.pathname.replace(/\d+/g, 'X')
 
             if (path.includes('#')) {
-                alert('Path includes # - ' + path)
                 path = path.split('#').slice(0, -1).join('');
-                alert('Path after split - ' + path)
             }
 
             // Remove trailing slash if it exists
@@ -137,8 +150,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Check if locators exist for the current URL
             if (!locators) {
-                var fileContents = JSON.stringify(jsonData, null, 2);
-                alert('No locators found for the current URL: ' + pageUrl + '\n\nLoaded file content:\n' + fileContents);
+                var URLs = Object.keys(jsonData).join('\n');
+                alert('No locators found for the current URL: ' + pageUrl + '\nCovered pages:\n' + URLs);
                 return;
             }
 
@@ -149,7 +162,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     target: {tabId: tabs[0].id}, function: highlightElementsInTab, args: [baseUrl, pageUrl, xpath]
                 });
             }
-
         });
     }
 
@@ -160,12 +172,12 @@ document.addEventListener('DOMContentLoaded', function () {
             var isBlock = jsonContent[pageUrl][xpath][0]['is_block'];
             var originalXpath = jsonContent[pageUrl][xpath][0]['original_xpath'];
 
-            var elements = document.evaluate(originalXpath, document, null, XPathResult.ANY_TYPE, null);
-            var element = elements.iterateNext();
+            var elements = document.evaluate(xpath, document, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
 
+            var element = elements.iterateNext();
             if (!element) {
-                // If the original XPath does not match any elements, try the generated XPath
-                elements = document.evaluate(xpath, document, null, XPathResult.ANY_TYPE, null);
+                // If the generated XPath does not match any elements, try the original XPath
+                elements = document.evaluate(xpath, document, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
                 element = elements.iterateNext();
             }
             while (element) {
@@ -175,15 +187,26 @@ document.addEventListener('DOMContentLoaded', function () {
                 } else {
                     element.style.backgroundColor = 'green';
                     element.removeAttribute("href");
+
                     // Add click event listener to each highlighted element
                     element.addEventListener('click', function (event) {
-                        if (isBlock) {
-                            event.preventDefault();
-                        }
+                        // event.preventDefault();
                         openSidebar(baseUrl, xpath);
                     });
-                }
 
+                    // Add mouseover event listener to show tooltip
+                    element.addEventListener('mouseover', function (event) {
+                        showTooltip(event, originalXpath);
+                    });
+
+                    // Add mouseout event listener to hide tooltip
+                    element.addEventListener('mouseout', function (event) {
+                        var tooltip = document.querySelector('.custom-tooltip');
+                        if (tooltip) {
+                            tooltip.remove();
+                        }
+                    });
+                }
                 element = elements.iterateNext();
             }
         });

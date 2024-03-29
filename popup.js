@@ -49,7 +49,6 @@ document.addEventListener('DOMContentLoaded', function () {
     var jsonFileInputLabel = document.getElementById('fileInputLabel');
     const resetJsonFileButton = document.getElementById('resetJsonFileInput');
     const checkButton = document.getElementById('checkButton');
-    const coveredPagesButton = document.getElementById('coveredPagesButton');
     const showAllButton = document.getElementById('showAllButton');
 
     const baseUrl = localStorage.getItem('baseUrl');
@@ -65,11 +64,6 @@ document.addEventListener('DOMContentLoaded', function () {
     // Event listener for "jsonFileInput" change event
     jsonFileInput.addEventListener('change', function (event) {
         jsonFileInputLabel.textContent = localStorage.getItem('jsonFileName');
-    });
-
-    coveredPagesButton.addEventListener('click', function () {
-        var jsonData = JSON.parse(localStorage.getItem('jsonFileContent'));
-        alert('Covered pages:\n' + Object.keys(jsonData).join('\n'));
     });
 
     // Event listener for changes in the jsonFileInput element

@@ -171,7 +171,7 @@ document.addEventListener('DOMContentLoaded', function () {
             var element = elements.iterateNext();
             if (!element) {
                 // If the generated XPath does not match any elements, try the original XPath
-                elements = document.evaluate(xpath, document, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
+                elements = document.evaluate(originalXpath, document, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
                 element = elements.iterateNext();
             }
             while (element) {

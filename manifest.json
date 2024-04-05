@@ -23,6 +23,9 @@
         "48": "icons/android-icon-48x48.png",
         "128": "icons/apple-icon-120x120.png"
     },
+    "background": {
+        "service_worker": "background.js"
+    },
     "content_scripts": [
         {
             "matches": [

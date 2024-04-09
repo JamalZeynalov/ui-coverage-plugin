@@ -97,11 +97,14 @@ function toggleCustomWindow(jsonFileContent) {
 document.addEventListener('DOMContentLoaded', function () {
     const coveredPagesButton = document.getElementById('coveredPagesButton');
     coveredPagesButton.addEventListener('click', function () {
-        chrome.storage.local.get(['jsonFileContent'], function (result) {
+        read_record('UiCoverageDB', 'jsonFileContent', function (jsonFileContent) {
+            if (!jsonFileContent) {
+                alert('No data found. Please select a JSON file!');
+                return;
+            }
             chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
-                var jc = JSON.parse(result.jsonFileContent);
                 chrome.scripting.executeScript({
-                    target: {tabId: tabs[0].id}, function: toggleCustomWindow, args: [jc]
+                    target: {tabId: tabs[0].id}, function: toggleCustomWindow, args: [jsonFileContent]
                 });
             });
         });

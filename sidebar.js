@@ -1,9 +1,9 @@
 // JavaScript code for sidebar functionality
 
 function updateSidebarContent(baseUrl, pageUrl, xpath) {
-    chrome.storage.local.get(['jsonFileContent'], function (result) {
+    read_record('UiCoverageDB', 'jsonFileContent', function (jsonFileContent) {
         var sidebarContent = document.querySelector('.sidebar-content');
-        var storedData = JSON.parse(result.jsonFileContent)[pageUrl];
+        var storedData = jsonFileContent[pageUrl];
         var summary = '';
 
         let usedIds = new Set();
@@ -48,7 +48,6 @@ function updateSidebarContent(baseUrl, pageUrl, xpath) {
         });
         sidebarContent.innerHTML += '</ul>';
     });
-
 }
 
 

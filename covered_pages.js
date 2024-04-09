@@ -28,6 +28,7 @@ function toggleCustomWindow(jsonFileContent) {
         title.textContent = 'Covered Pages';
         title.style.marginBottom = '10px'; // Add some margin below the title
         title.style.fontWeight = 'bold'; // Make the title bold
+        title.style.textAlign = 'center'; // Center the title
 
         // Create content for the custom window
         var content = window.document.createElement('div');
@@ -37,7 +38,9 @@ function toggleCustomWindow(jsonFileContent) {
         var pagesList = '<ul style="list-style-type: none; padding: 0;">'; // Remove default list style and padding
 
         pages.forEach(function (page) {
-            pagesList += '<li style="margin-bottom: 5px;">' + page + '<li>'; // Add margin below each list item
+            pagesList += '<li style="margin-bottom: 5px;">' +
+                '<a target="_blank" href="' + page + '">' + page + '</a>' +
+                '<li>';
         });
         pagesList += '</ul>';
 

@@ -1,4 +1,9 @@
 function insert_record(dbName, storeName, recordData) {
+    /**
+     * Open the database and insert a record into the object store.
+     * The `put` method is used to insert a record into the object store.
+     * If the record already exists, it will be updated.
+     */
     let request = indexedDB.open(dbName, 1);
 
     request.onsuccess = function (event) {
@@ -25,6 +30,9 @@ function insert_record(dbName, storeName, recordData) {
 
 
 function read_record(dbName, storeName, callback) {
+    /**
+     * Open the database and read the latest record from the object store.
+     */
     let request = indexedDB.open(dbName, 1);
     request.onsuccess = function (event) {
         let db = event.target.result;
@@ -62,6 +70,10 @@ function read_record(dbName, storeName, callback) {
 
 // Function to clear the object store
 function clearObjectStore(dbName, storeName) {
+    /*
+    * Open the database and clear the object store using the `clear` method.
+    * The `clear` method deletes all records from the object store.
+    */
     let request = indexedDB.open(dbName, 1);
 
     request.onsuccess = function (event) {

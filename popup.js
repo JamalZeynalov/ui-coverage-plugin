@@ -1,5 +1,11 @@
 function openSidebar(baseUrl, xpath = null) {
-    // close if already open
+    /**
+     * Open the sidebar with the given base URL and XPath.
+     *
+     * @param {string} baseUrl - The base URL of the website.
+     * @param {string} xpath - The XPath of the element to be highlighted.
+     * */
+        // close if already open
     let sidebarFrame = window.document.getElementById('sidebarFrame');
     if (sidebarFrame) {
         sidebarFrame.parentNode.removeChild(sidebarFrame);
@@ -30,6 +36,9 @@ function openSidebar(baseUrl, xpath = null) {
 }
 
 function showTooltip(targetElement, text) {
+    /**
+     * Show a tooltip with the given text at the position of the target element.
+     */
     let tooltip = document.createElement('div');
     tooltip.className = 'custom-tooltip';
     tooltip.innerHTML = text;
@@ -45,6 +54,15 @@ function showTooltip(targetElement, text) {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
+    /**
+     * Add click event listener to the "Check" button.
+     * This button will highlight the elements on the page based on the JSON data.
+     * The JSON data is retrieved from the IndexedDB database.
+     * The highlighted elements will be clickable and will open the sidebar with the details.
+     * The "Show All" button will open the sidebar with all the covered elements.
+     * The sidebar can be closed by clicking the close button.
+     * @type {HTMLElement}
+     */
     const checkButton = document.getElementById('checkButton');
     const showAllButton = document.getElementById('showAllButton');
 
@@ -80,6 +98,10 @@ document.addEventListener('DOMContentLoaded', function () {
             });
 
             function highlightElements(jsonData, baseUrl) {
+                /** Highlight the elements on the page based on the JSON data.
+                 * @param {Object} jsonData - The JSON data containing the locators for each URL.
+                 * @param {string} baseUrl - The base URL of the website.
+                 */
                 // Get information about the currently active tab
                 chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
                     // Extract the URL of the active tab
@@ -121,6 +143,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Function to highlight elements on the page based on XPath
             function highlightElementsInTab(jsonFileContent, baseUrl, pageUrl, xpath) {
+                /** Highlight the elements on the page based on the JSON data.
+                 * The highlighted elements will be clickable and will open the sidebar with the details.
+                 * @param {Object} jsonFileContent - The JSON data containing the locators for each URL.
+                 * @param {string} baseUrl - The base URL of the website.
+                 * @param {string} pageUrl - The URL of the current page.
+                 * @param {string} xpath - The XPath of the element to be highlighted.
+                 */
                 let isBlock = jsonFileContent[pageUrl][xpath][0]['is_block'];
                 let originalXpath = jsonFileContent[pageUrl][xpath][0]['original_xpath'];
 

@@ -1,4 +1,5 @@
 function createIndexedDB(dbName, storeNames) {
+    // Open (or create) the database
     let request = indexedDB.open(dbName, 1);
 
     request.onupgradeneeded = function (event) {
@@ -21,5 +22,9 @@ function createIndexedDB(dbName, storeNames) {
     };
 }
 
-
+/*
+    * Create an IndexedDB database with the name "UiCoverageDB" and two object stores:
+    * 1. jsonFileContent
+    * 2. jsonFileName
+ */
 createIndexedDB("UiCoverageDB", ["jsonFileContent", "jsonFileName"]);

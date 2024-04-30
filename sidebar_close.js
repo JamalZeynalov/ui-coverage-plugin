@@ -1,5 +1,7 @@
 // Function to close the sidebar
 window.closeSidebar = function closeSidebar() {
+    /** Close the sidebar by removing the sidebar frame.
+     */
     var sidebarFrame = window.document.getElementById('sidebarFrame');
     if (sidebarFrame) {
         sidebarFrame.parentNode.removeChild(sidebarFrame);
@@ -8,6 +10,9 @@ window.closeSidebar = function closeSidebar() {
 
 
 document.addEventListener('DOMContentLoaded', function () {
+    /** Add an event listener to the close button.
+     * When the close button is clicked, the sidebar will be closed.
+     */
     var closeBtn = document.querySelector('.close-btn');
 
     // Event listener for the close button

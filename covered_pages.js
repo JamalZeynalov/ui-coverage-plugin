@@ -1,5 +1,11 @@
 // Function to open or close the custom window
 function toggleCustomWindow(jsonFileContent) {
+    /**
+     * Check if the custom window already exists.
+     * If it does, remove it. Otherwise, create a new custom window.
+     * The custom window will display the covered pages from the JSON file.
+     * The covered pages are the URLs for which locators are found in the JSON file.
+     */
     var customWindow = window.document.getElementById('customWindow');
 
     // If the custom window already exists, remove it
@@ -98,6 +104,11 @@ function toggleCustomWindow(jsonFileContent) {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
+    /**
+     * Add a click event listener to the "Covered Pages" button.
+     * When the button is clicked, read the JSON file content from the IndexedDB
+     * and display the covered pages in a custom window.
+     */
     const coveredPagesButton = document.getElementById('coveredPagesButton');
     coveredPagesButton.addEventListener('click', function () {
         read_record('UiCoverageDB', 'jsonFileContent', function (jsonFileContent) {

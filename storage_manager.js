@@ -1,4 +1,10 @@
 document.addEventListener('DOMContentLoaded', function () {
+    /**
+     * Manage the storage of the JSON file in the IndexedDB.
+     * The JSON file is saved in the IndexedDB when the user selects a file.
+     * The JSON file content can be cleared by clicking the "Reset" button.
+     * The selected file name is displayed in the input label.
+     */
     let jsonFileInput = document.getElementById('jsonFileInput');
     let jsonFileInputLabel = document.getElementById('fileInputLabel');
     const resetJsonFileButton = document.getElementById('resetJsonFileInput');

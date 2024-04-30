@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "UI Tests Coverage",
-    "version": "0.0.4",
+    "version": "1.0.0",
     "description": "Highlight elements used during UI tests",
     "permissions": [
         "activeTab",
@@ -13,15 +13,15 @@
     "action": {
         "default_popup": "popup.html",
         "default_icon": {
-            "16": "icons/favicon-16x16.png",
-            "48": "icons/android-icon-48x48.png",
-            "128": "icons/apple-icon-120x120.png"
+            "16": "icons/icon16.png",
+            "48": "icons/icon128.png",
+            "128": "icons/icon128.png"
         }
     },
     "icons": {
-        "16": "icons/favicon-16x16.png",
-        "48": "icons/android-icon-48x48.png",
-        "128": "icons/apple-icon-120x120.png"
+        "16": "icons/icon16.png",
+        "48": "icons/icon128.png",
+        "128": "icons/icon128.png"
     },
     "background": {
         "service_worker": "background.js"

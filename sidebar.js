@@ -1,6 +1,11 @@
 // JavaScript code for sidebar functionality
 
 function updateSidebarContent(baseUrl, pageUrl, xpath) {
+    /** Update the sidebar content with the test cases that interacted with the element.
+     * @param {string} baseUrl - The base URL of the website.
+     * @param {string} pageUrl - The URL of the current page.
+     * @param {string} xpath - The XPath of the element.
+     */
     read_record('UiCoverageDB', 'jsonFileContent', function (jsonFileContent) {
         var sidebarContent = document.querySelector('.sidebar-content');
         var storedData = jsonFileContent[pageUrl];
@@ -29,7 +34,7 @@ function updateSidebarContent(baseUrl, pageUrl, xpath) {
             });
             var originalUrl = testCases[0]["original_page_url"];
             summary = '<b>' + testCases.length + ' test cases interacted with this page</b>' + '<br>' +
-                '<p>Oritinal URL: <a href=' + originalUrl + ' target="_blank">' + originalUrl + ' </a></p><hr>';
+                '<p>Original URL: <a href=' + originalUrl + ' target="_blank">' + originalUrl + ' </a></p><hr>';
         }
         testCases.sort((a, b) => parseInt(a.allure_id) - parseInt(b.allure_id));
 
@@ -52,6 +57,8 @@ function updateSidebarContent(baseUrl, pageUrl, xpath) {
 
 
 document.addEventListener('DOMContentLoaded', function () {
+    /** Update the sidebar content with the base URL and XPath.
+     */
     var urlParams = new URLSearchParams(window.location.search);
     var baseUrl = urlParams.get('baseUrl');
     var xpath = urlParams.get('xpath');

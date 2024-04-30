@@ -1,5 +1,8 @@
 // options.js
 document.addEventListener('DOMContentLoaded', function() {
+    /**
+     * Display the extension options form and input field
+     */
     var settingsForm = document.getElementById('settingsForm');
     var baseUrlInput = document.getElementById('baseUrl');
 

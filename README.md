@@ -42,6 +42,13 @@ The only requirement - the ".json" file you upload <u>must be in the same format
    - Single elements will be highlighted with dark green color (`#5FC401`)
 6. Refresh the page to remove the highlights (optional)
 
+### Demo
+1. Navigate to the [demo page](https://ultimateqa.com/fake-landing-page)
+2. Click on the extension icon
+3. Upload the [used_locators_example.json](examples%2Fused_locators_example.json) file
+4. Click on the "Check" button
+5. Enjoy!
+
 ### Additional features
 1. "Reset Selected File" button
     - Resets the selected file and removes the data from the extension memory

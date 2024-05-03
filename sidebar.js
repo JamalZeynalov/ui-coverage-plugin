@@ -26,10 +26,15 @@ function updateSidebarContent(baseUrl, pageUrl, xpath) {
             xpaths.forEach(function (xpath) {
                 let cases = storedData[xpath];
                 cases.forEach(function (caseData) {
-                    if (!usedIds.has(caseData.allure_id)) {
+                    if (!usedIds.has(caseData.allure_id) && caseData.allure_id !== null) {
                         testCases.push(caseData);
                         usedIds.add(caseData.allure_id);
+                    } else if (caseData.allure_id === null && !usedIds.has(caseData.test_name)) {
+                        caseData.allure_id = 'No ID';
+                        usedIds.add(caseData.test_name);
+                        testCases.push(caseData);
                     }
+
                 });
             });
             let originalUrl = testCases[0]["original_page_url"];
@@ -46,6 +51,7 @@ function updateSidebarContent(baseUrl, pageUrl, xpath) {
         testCases.forEach(function (testCase) {
             let title = testCase["test_name"];
             let caseId = testCase["allure_id"];
+
             // Create a list item with a link to the test case
             let listItem = '' + '<li style="font-size: 20px; padding-bottom: 20px">' + '<a target="_blank" href="' + baseUrl + '/testcase/' + caseId + '">' + caseId + '</a> ' + title + '</li><hr>' + '';
 

@@ -1,0 +1,88 @@
+{
+    "https://ultimateqa.com/fake-landing-page": {
+        "//a[.='View Courses']": [
+            {
+                "allure_id": null,
+                "is_block": false,
+                "original_page_url": "https://ultimateqa.com/fake-landing-page",
+                "outer_xpath": null,
+                "test_name": "test_view_courses_button"
+            }
+        ],
+        "//div[@class='et_pb_menu__menu']//a[.='I want a free DISCOVERY SESSION']": [
+            {
+                "allure_id": null,
+                "is_block": false,
+                "original_page_url": "https://ultimateqa.com/fake-landing-page",
+                "outer_xpath": null,
+                "test_name": "test_discovery_session_link"
+            }
+        ],
+        "//div[@class='et_pb_row']/div[contains(@class, 'et-last-child')]": [
+            {
+                "allure_id": null,
+                "is_block": true,
+                "original_page_url": "https://ultimateqa.com/fake-landing-page",
+                "outer_xpath": null,
+                "test_name": "test_top_courses"
+            },
+            {
+                "allure_id": null,
+                "is_block": true,
+                "original_page_url": "https://ultimateqa.com/fake-landing-page",
+                "outer_xpath": null,
+                "test_name": "test_top_courses"
+            },
+            {
+                "allure_id": null,
+                "is_block": true,
+                "original_page_url": "https://ultimateqa.com/fake-landing-page",
+                "outer_xpath": null,
+                "test_name": "test_top_courses"
+            },
+            {
+                "allure_id": null,
+                "is_block": true,
+                "original_page_url": "https://ultimateqa.com/fake-landing-page",
+                "outer_xpath": null,
+                "test_name": "test_top_courses"
+            }
+        ],
+        "//div[@class='et_pb_row']/div[contains(@class, 'et-last-child')]//div[contains(@class, 'et_pb_module')]//h4[.='HTML & CSS']": [
+            {
+                "allure_id": null,
+                "is_block": false,
+                "original_page_url": "https://ultimateqa.com/fake-landing-page",
+                "outer_xpath": null,
+                "test_name": "test_top_courses"
+            }
+        ],
+        "//div[@class='et_pb_row']/div[contains(@class, 'et-last-child')]//div[contains(@class, 'et_pb_module')]//h4[.='Python']": [
+            {
+                "allure_id": null,
+                "is_block": false,
+                "original_page_url": "https://ultimateqa.com/fake-landing-page",
+                "outer_xpath": null,
+                "test_name": "test_top_courses"
+            }
+        ],
+        "//div[@class='et_pb_row']/div[contains(@class, 'et-last-child')]//div[contains(@class, 'et_pb_module')]//h4[.='UX Design']": [
+            {
+                "allure_id": null,
+                "is_block": false,
+                "original_page_url": "https://ultimateqa.com/fake-landing-page",
+                "outer_xpath": null,
+                "test_name": "test_top_courses"
+            }
+        ],
+        "//div[@class='et_pb_row']/div[contains(@class, 'et-last-child')]//div[contains(@class, 'et_pb_module')]//h4[.='Web Development']": [
+            {
+                "allure_id": null,
+                "is_block": false,
+                "original_page_url": "https://ultimateqa.com/fake-landing-page",
+                "outer_xpath": null,
+                "test_name": "test_top_courses"
+            }
+        ]
+    }
+}

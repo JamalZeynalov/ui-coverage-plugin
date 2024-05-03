@@ -151,16 +151,20 @@ document.addEventListener('DOMContentLoaded', function () {
                  * @param {string} xpath - The XPath of the element to be highlighted.
                  */
                 let isBlock = jsonFileContent[pageUrl][xpath][0]['is_block'];
-                let originalXpath = jsonFileContent[pageUrl][xpath][0]['original_xpath'];
+                let outer_xpath = jsonFileContent[pageUrl][xpath][0]['outer_xpath'];
 
-                let elements = document.evaluate(xpath, document, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
-
-                let element = elements.iterateNext();
-                if (!element) {
-                    // If the generated XPath does not match any elements, try the original XPath
-                    elements = document.evaluate(originalXpath, document, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
-                    element = elements.iterateNext();
+                let finalXpath;
+                if (outer_xpath != null) {
+                    // When the element is searched without relation to any block
+                    finalXpath = outer_xpath;
+                } else {
+                    // When the element is searched within a block by relative xpath
+                    finalXpath = xpath;
                 }
+
+                let elements = document.evaluate(finalXpath, document, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
+                let element = elements.iterateNext();
+
                 while (element) {
                     element.setAttribute('data-highlighted', 'true');
                     if (isBlock) {
@@ -172,12 +176,12 @@ document.addEventListener('DOMContentLoaded', function () {
                         // Add click event listener to each highlighted element
                         element.addEventListener('click', function (event) {
                             // event.preventDefault();
-                            openSidebar(baseUrl, xpath);
+                            openSidebar(baseUrl, finalXpath);
                         });
 
                         // Add mouseover event listener to show tooltip
                         element.addEventListener('mouseover', function (event) {
-                            showTooltip(event, originalXpath);
+                            showTooltip(event, finalXpath);
                         });
 
                         // Add mouseout event listener to hide tooltip

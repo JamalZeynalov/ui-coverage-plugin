@@ -6,7 +6,7 @@ function toggleCustomWindow(jsonFileContent) {
      * The custom window will display the covered pages from the JSON file.
      * The covered pages are the URLs for which locators are found in the JSON file.
      */
-    var customWindow = window.document.getElementById('customWindow');
+    let customWindow = window.document.getElementById('customWindow');
 
     // If the custom window already exists, remove it
     if (customWindow) {
@@ -30,18 +30,22 @@ function toggleCustomWindow(jsonFileContent) {
         customWindow.style.textAlign = 'left'; // Align the list items vertically from left
 
         // Create a title for the custom window
-        var title = document.createElement('h4');
+        let title = document.createElement('h4');
         title.textContent = 'Covered Pages';
         title.style.marginBottom = '10px'; // Add some margin below the title
         title.style.fontWeight = 'bold'; // Make the title bold
         title.style.textAlign = 'center'; // Center the title
 
         // Create content for the custom window
-        var content = window.document.createElement('div');
+        let content = window.document.createElement('div');
 
-        var pages = Object.keys(jsonFileContent).sort();
+        // delete 'id' key from jsonFileContent if it exists
+        if (jsonFileContent.id) {
+            delete jsonFileContent.id;
+        }
+        let pages = Object.keys(jsonFileContent).sort();
 
-        var pagesList = '<ul style="list-style-type: none; padding: 0;">'; // Remove default list style and padding
+        let pagesList = '<ul style="list-style-type: none; padding: 0;">'; // Remove default list style and padding
 
         pages.forEach(function (page) {
             pagesList += '<li style="margin-bottom: 5px;">' +
@@ -53,7 +57,7 @@ function toggleCustomWindow(jsonFileContent) {
         content.innerHTML += pagesList;
 
         // Create a close button
-        var closeButton = document.createElement('button');
+        let closeButton = document.createElement('button');
         closeButton.setAttribute('id', 'close');
         closeButton.style.position = 'absolute';
         closeButton.style.top = '10px';
@@ -68,7 +72,7 @@ function toggleCustomWindow(jsonFileContent) {
         closeButton.style.transition = 'background-color 0.3s';
 
         // Create the close button lines
-        var closeLine1 = document.createElement('div');
+        let closeLine1 = document.createElement('div');
         closeLine1.style.position = 'absolute';
         closeLine1.style.top = '50%';
         closeLine1.style.left = '50%';
@@ -78,7 +82,7 @@ function toggleCustomWindow(jsonFileContent) {
         closeLine1.style.transform = 'translate(-50%, -50%) rotate(45deg)';
         closeButton.appendChild(closeLine1);
 
-        var closeLine2 = document.createElement('div');
+        let closeLine2 = document.createElement('div');
         closeLine2.style.position = 'absolute';
         closeLine2.style.top = '50%';
         closeLine2.style.left = '50%';

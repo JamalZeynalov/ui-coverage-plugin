@@ -62,6 +62,7 @@ The only requirement - the ".json" file you upload <u>must be in the same format
 3. "Covered Pages" button opens a sidebar showing:
    - All pages covered by the uploaded `.json` file
    - Covered pages URLs as links to open them in a new tab
+   - Number of unique tests (Allure IDs) interacted with each page
    - "X" button to close the sidebar
 4. A click on any highlighted element (not block) opens a sidebar showing:
    - Count of test cases interacted with this element on this page

@@ -48,8 +48,19 @@ function toggleCustomWindow(jsonFileContent) {
         let pagesList = '<ul style="list-style-type: none; padding: 0;">'; // Remove default list style and padding
 
         pages.forEach(function (page) {
+            // collect tests for all xpaths
+            let tests = Object.values(jsonFileContent[page]).sort();
+            let relatedTests = new Set();
+            tests.forEach(function (xpathCases) {
+                xpathCases.forEach(function (caseData) {
+                    if (!relatedTests.has(caseData.allure_id) && caseData.allure_id !== null) {
+                        relatedTests.add(caseData.allure_id)
+                    }
+                });
+            });
+            // Create a list item with a link to the page and the number of related test cases
             pagesList += '<li style="margin-bottom: 5px;">' +
-                '<a target="_blank" href="' + page + '">' + page + '</a>' +
+                '<a target="_blank" href="' + page + '">' + page + '</a>' + ' - ' + relatedTests.size + ' test cases' +
                 '<li>';
         });
         pagesList += '</ul>';

@@ -14,6 +14,10 @@ The only requirement - the ".json" file you upload <u>must be in the same format
 
 ## How to use
 
+<a href="https://www.youtube.com/watch?v=LdpBQjmq4aQ" target="_blank">
+  <img src="https://img.youtube.com/vi/LdpBQjmq4aQ/0.jpg" alt="Watch the video">
+</a>
+
 ### Install and configure the extension
 
 1. Clone the extension repository from GitHub:<br>

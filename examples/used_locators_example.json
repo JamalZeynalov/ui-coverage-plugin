@@ -1,12 +1,21 @@
 {
     "https://ultimateqa.com/fake-landing-page": {
+        "(//div[contains(@class, 'et_pb_row_0')]//div[@class='et_pb_text_inner'])[2]": [
+            {
+                "allure_id": null,
+                "is_block": false,
+                "original_page_url": "https://ultimateqa.com/fake-landing-page",
+                "outer_xpath": null,
+                "test_name": "Check Welcome Message"
+            }
+        ],
         "//a[.='View Courses']": [
             {
                 "allure_id": null,
                 "is_block": false,
                 "original_page_url": "https://ultimateqa.com/fake-landing-page",
                 "outer_xpath": null,
-                "test_name": "test_view_courses_button"
+                "test_name": "Check View Courses Button"
             }
         ],
         "//div[@class='et_pb_menu__menu']//a[.='I want a free DISCOVERY SESSION']": [
@@ -15,7 +24,7 @@
                 "is_block": false,
                 "original_page_url": "https://ultimateqa.com/fake-landing-page",
                 "outer_xpath": null,
-                "test_name": "test_discovery_session_link"
+                "test_name": "Check Discovery Session Link"
             }
         ],
         "//div[@class='et_pb_row']/div[contains(@class, 'et-last-child')]": [
@@ -24,28 +33,28 @@
                 "is_block": true,
                 "original_page_url": "https://ultimateqa.com/fake-landing-page",
                 "outer_xpath": null,
-                "test_name": "test_top_courses"
+                "test_name": "Check Top Courses"
             },
             {
                 "allure_id": null,
                 "is_block": true,
                 "original_page_url": "https://ultimateqa.com/fake-landing-page",
                 "outer_xpath": null,
-                "test_name": "test_top_courses"
+                "test_name": "Check Top Courses"
             },
             {
                 "allure_id": null,
                 "is_block": true,
                 "original_page_url": "https://ultimateqa.com/fake-landing-page",
                 "outer_xpath": null,
-                "test_name": "test_top_courses"
+                "test_name": "Check Top Courses"
             },
             {
                 "allure_id": null,
                 "is_block": true,
                 "original_page_url": "https://ultimateqa.com/fake-landing-page",
                 "outer_xpath": null,
-                "test_name": "test_top_courses"
+                "test_name": "Check Top Courses"
             }
         ],
         "//div[@class='et_pb_row']/div[contains(@class, 'et-last-child')]//div[contains(@class, 'et_pb_module')]//h4[.='HTML & CSS']": [
@@ -54,7 +63,7 @@
                 "is_block": false,
                 "original_page_url": "https://ultimateqa.com/fake-landing-page",
                 "outer_xpath": null,
-                "test_name": "test_top_courses"
+                "test_name": "Check Top Courses"
             }
         ],
         "//div[@class='et_pb_row']/div[contains(@class, 'et-last-child')]//div[contains(@class, 'et_pb_module')]//h4[.='Python']": [
@@ -63,7 +72,7 @@
                 "is_block": false,
                 "original_page_url": "https://ultimateqa.com/fake-landing-page",
                 "outer_xpath": null,
-                "test_name": "test_top_courses"
+                "test_name": "Check Top Courses"
             }
         ],
         "//div[@class='et_pb_row']/div[contains(@class, 'et-last-child')]//div[contains(@class, 'et_pb_module')]//h4[.='UX Design']": [
@@ -72,7 +81,7 @@
                 "is_block": false,
                 "original_page_url": "https://ultimateqa.com/fake-landing-page",
                 "outer_xpath": null,
-                "test_name": "test_top_courses"
+                "test_name": "Check Top Courses"
             }
         ],
         "//div[@class='et_pb_row']/div[contains(@class, 'et-last-child')]//div[contains(@class, 'et_pb_module')]//h4[.='Web Development']": [
@@ -81,7 +90,16 @@
                 "is_block": false,
                 "original_page_url": "https://ultimateqa.com/fake-landing-page",
                 "outer_xpath": null,
-                "test_name": "test_top_courses"
+                "test_name": "Check Top Courses"
+            }
+        ],
+        "//div[contains(@class, 'et_pb_row_0')]//div[@class='et_pb_text_inner']/h1": [
+            {
+                "allure_id": null,
+                "is_block": false,
+                "original_page_url": "https://ultimateqa.com/fake-landing-page",
+                "outer_xpath": null,
+                "test_name": "Check Welcome Message"
             }
         ]
     }
